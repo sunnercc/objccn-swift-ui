@@ -74,13 +74,24 @@ struct CalculatorButton: View {
     let action: () -> Void
     
     var body: some View {
+//        Button(action: action) {
+//            Text(title)
+//            .font(.system(size: fontSize))
+//            .foregroundColor(.white)
+//            .frame(width: size.width, height: size.height)
+//            .background(Color(backgroundColorName))
+//            .cornerRadius(size.width / 2)
+//        }
+        
         Button(action: action) {
-            Text(title)
-            .font(.system(size: fontSize))
-            .foregroundColor(.white)
-            .frame(width: size.width, height: size.height)
-            .background(Color(backgroundColorName))
-            .cornerRadius(size.width / 2)
+            ZStack(alignment: .center) {
+                Circle()
+                .foregroundColor(Color(backgroundColorName))
+                Text(title)
+                    .font(.system(size: fontSize))
+                    .foregroundColor(.white)
+            }
+            .frame(width: size.width, height: size.height, alignment: .trailing)
         }
     }
 }
