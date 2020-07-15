@@ -8,6 +8,61 @@
 
 import SwiftUI
 
+enum CalculatorButtonItem {
+    
+    enum Op: String {
+        case plus = "+"
+        case minus = "-"
+        case divide = "÷"
+        case multiply = "×"
+        case equal = "="
+    }
+    
+    enum Command: String {
+        case clear = "AC"
+        case flip = "+/-"
+        case percent = "%"
+    }
+    
+    case digit(Int)
+    case dot
+    case op(Op)
+    case command(Command)
+}
+
+extension CalculatorButtonItem {
+    
+    var title: String {
+        switch self {
+        case .digit(let value):
+            return String(value)
+        case .dot:
+            return "."
+        case .op(let op):
+            return op.rawValue
+        case .command(let command):
+            return command.rawValue
+        }
+    }
+    
+    var size: CGSize {
+        CGSize(width: 88, height: 88)
+    }
+    
+    var backgroundColorName: String {
+        switch self {
+        case .digit, .dot:
+            return "digitBackground"
+        case .op:
+            return "operatorBackground"
+        case .command:
+            return "commandBackground"
+        }
+    }
+}
+
+extension CalculatorButtonItem: Hashable {}
+
 struct CalculatorButton: View {
     let fontSize: CGFloat = 38
     let title: String
@@ -28,40 +83,22 @@ struct CalculatorButton: View {
 }
 
 struct ContentView: View {
+    
+    let row: [CalculatorButtonItem] = [
+        .digit(1), .digit(2), .digit(3), .op(.plus)
+    ]
+    
     var body: some View {
         HStack {
-            CalculatorButton(
-                title: "1",
-                size: CGSize(width: 88, height: 88),
-                backgroundColorName: "digitBackground",
-                action: {
-                    print("button 1")
-                }
-            )
-            CalculatorButton(
-                title: "2",
-                size: CGSize(width: 88, height: 88),
-                backgroundColorName: "digitBackground",
-                action: {
-                    print("button 2")
-                }
-            )
-            CalculatorButton(
-                title: "3",
-                size: CGSize(width: 88, height: 88),
-                backgroundColorName: "digitBackground",
-                action: {
-                    print("button 3")
-                }
-            )
-            CalculatorButton(
-                title: "+",
-                size: CGSize(width: 88, height: 88),
-                backgroundColorName: "operatorBackground",
-                action: {
-                    print("button +")
-                }
-            )
+            ForEach(row, id: \.self) { item in
+                CalculatorButton(
+                    title: item.title,
+                    size: item.size,
+                    backgroundColorName: item.backgroundColorName)
+                    {
+                        print("button: \(item.title)")
+                    }
+            }
         }
     }
 }
