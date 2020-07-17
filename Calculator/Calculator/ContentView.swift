@@ -74,13 +74,24 @@ struct CalculatorButton: View {
     let action: () -> Void
     
     var body: some View {
+//        Button(action: action) {
+//            Text(title)
+//            .font(.system(size: fontSize))
+//            .foregroundColor(.white)
+//            .frame(width: size.width, height: size.height)
+//            .background(Color(backgroundColorName))
+//            .cornerRadius(size.width / 2)
+//        }
+        
         Button(action: action) {
-            Text(title)
-            .font(.system(size: fontSize))
-            .foregroundColor(.white)
-            .frame(width: size.width, height: size.height)
-            .background(Color(backgroundColorName))
-            .cornerRadius(size.width / 2)
+            ZStack(alignment: .center) {
+                Circle()
+                .foregroundColor(Color(backgroundColorName))
+                Text(title)
+                    .font(.system(size: fontSize))
+                    .foregroundColor(.white)
+            }
+            .frame(width: size.width, height: size.height, alignment: .trailing)
         }
     }
 }
@@ -126,7 +137,6 @@ struct ContentView: View {
         VStack(alignment: .trailing, spacing: 12) {
             Spacer()
             Text("0")
-                .foregroundColor(.primary)
                 .font(.system(size: 76))
                 .minimumScaleFactor(0.5)
                 .padding(.trailing, 24)
@@ -147,7 +157,7 @@ struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         Group {
             ContentView()
-//            ContentView().previewDevice("iPhone 8 Plus")
+            ContentView().previewDevice("iPhone 8 Plus")
         }
     }
 }
