@@ -97,8 +97,7 @@ struct CalculatorButton: View {
 }
 
 struct CalculatorButtonRow: View {
-    @Binding var brain: CalculatorBrain
-    
+    var model: CalculatorModel
     let row: [CalculatorButtonItem]
     var body: some View {
         HStack {
@@ -108,7 +107,7 @@ struct CalculatorButtonRow: View {
                     size: item.size,
                     backgroundColorName: item.backgroundColorName)
                     {
-                        self.brain = self.brain.apply(item: item)
+                        self.model.apply(item)
                     }
             }
         }
@@ -116,7 +115,8 @@ struct CalculatorButtonRow: View {
 }
 
 struct CalculatorButtonPad: View {
-    @Binding var brain: CalculatorBrain
+    
+    var model: CalculatorModel
     
     let pad: [[CalculatorButtonItem]] = [
         [.command(.clear), .command(.flip),.command(.percent), .op(.divide)],
@@ -129,7 +129,7 @@ struct CalculatorButtonPad: View {
     var body: some View {
         VStack(spacing: 8) {
             ForEach(pad, id: \.self) { row in
-                CalculatorButtonRow(brain: self.$brain, row: row)
+                CalculatorButtonRow(model: self.model, row: row)
             }
         }
     }
@@ -142,6 +142,9 @@ struct ContentView: View {
     var body: some View {
         VStack(alignment: .trailing, spacing: 12) {
             Spacer()
+            Button("操作记录:\(model.history.count)") {
+                print(self.model.history)
+            }
             Text(model.brain.output)
                 .font(.system(size: 76))
                 .minimumScaleFactor(0.5)
@@ -151,7 +154,7 @@ struct ContentView: View {
                     minWidth: 0,
                     maxWidth: .infinity,
                     alignment: .trailing)
-            CalculatorButtonPad(brain: $model.brain)
+            CalculatorButtonPad(model: model)
                 .frame(
                     maxWidth: .infinity)
                 .padding(.bottom, 10)
