@@ -137,12 +137,12 @@ struct CalculatorButtonPad: View {
 
 struct ContentView: View {
     
-    @State private var brain: CalculatorBrain = .left("0")
+    @ObservedObject var model = CalculatorModel()
     
     var body: some View {
         VStack(alignment: .trailing, spacing: 12) {
             Spacer()
-            Text(brain.output)
+            Text(model.brain.output)
                 .font(.system(size: 76))
                 .minimumScaleFactor(0.5)
                 .padding(.trailing, 24)
@@ -151,10 +151,7 @@ struct ContentView: View {
                     minWidth: 0,
                     maxWidth: .infinity,
                     alignment: .trailing)
-            Button("test") {
-                self.brain = .left("1.23")
-            }
-            CalculatorButtonPad(brain: self.$brain)
+            CalculatorButtonPad(brain: $model.brain)
                 .frame(
                     maxWidth: .infinity)
                 .padding(.bottom, 10)
