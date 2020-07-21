@@ -74,29 +74,31 @@ struct CalculatorButton: View {
     let action: () -> Void
     
     var body: some View {
-//        Button(action: action) {
-//            Text(title)
-//            .font(.system(size: fontSize))
-//            .foregroundColor(.white)
-//            .frame(width: size.width, height: size.height)
-//            .background(Color(backgroundColorName))
-//            .cornerRadius(size.width / 2)
-//        }
-        
         Button(action: action) {
-            ZStack(alignment: .center) {
-                Circle()
-                .foregroundColor(Color(backgroundColorName))
-                Text(title)
-                    .font(.system(size: fontSize))
-                    .foregroundColor(.white)
-            }
-            .frame(width: size.width, height: size.height, alignment: .trailing)
+            Text(title)
+            .font(.system(size: fontSize))
+            .foregroundColor(.white)
+            .frame(width: size.width, height: size.height)
+            .background(Color(backgroundColorName))
+            .cornerRadius(size.width / 2)
         }
+        
+//        Button(action: action) {
+//            ZStack(alignment: .center) {
+//                Circle()
+//                .foregroundColor(Color(backgroundColorName))
+//                Text(title)
+//                    .font(.system(size: fontSize))
+//                    .foregroundColor(.white)
+//            }
+//            .frame(width: size.width, height: size.height, alignment: .trailing)
+//        }
     }
 }
 
 struct CalculatorButtonRow: View {
+    @Binding var brain: CalculatorBrain
+    
     let row: [CalculatorButtonItem]
     var body: some View {
         HStack {
@@ -106,7 +108,7 @@ struct CalculatorButtonRow: View {
                     size: item.size,
                     backgroundColorName: item.backgroundColorName)
                     {
-                        print("button: \(item.title)")
+                        self.brain = self.brain.apply(item: item)
                     }
             }
         }
@@ -114,6 +116,8 @@ struct CalculatorButtonRow: View {
 }
 
 struct CalculatorButtonPad: View {
+    @Binding var brain: CalculatorBrain
+    
     let pad: [[CalculatorButtonItem]] = [
         [.command(.clear), .command(.flip),.command(.percent), .op(.divide)],
         [.digit(7), .digit(8), .digit(9), .op(.multiply)],
@@ -125,7 +129,7 @@ struct CalculatorButtonPad: View {
     var body: some View {
         VStack(spacing: 8) {
             ForEach(pad, id: \.self) { row in
-                CalculatorButtonRow(row: row)
+                CalculatorButtonRow(brain: self.$brain, row: row)
             }
         }
     }
@@ -133,10 +137,12 @@ struct CalculatorButtonPad: View {
 
 struct ContentView: View {
     
+    @State private var brain: CalculatorBrain = .left("0")
+    
     var body: some View {
         VStack(alignment: .trailing, spacing: 12) {
             Spacer()
-            Text("0")
+            Text(brain.output)
                 .font(.system(size: 76))
                 .minimumScaleFactor(0.5)
                 .padding(.trailing, 24)
@@ -145,7 +151,10 @@ struct ContentView: View {
                     minWidth: 0,
                     maxWidth: .infinity,
                     alignment: .trailing)
-            CalculatorButtonPad()
+            Button("test") {
+                self.brain = .left("1.23")
+            }
+            CalculatorButtonPad(brain: self.$brain)
                 .frame(
                     maxWidth: .infinity)
                 .padding(.bottom, 10)
