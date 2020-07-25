@@ -142,7 +142,7 @@ struct ContentView: View {
     var body: some View {
         VStack(alignment: .trailing, spacing: 12) {
             Spacer()
-            Button("操作记录:\(model.history.count)") {
+            Button("操作履历:\(model.history.count)") {
                 print(self.model.history)
             }
             Text(model.brain.output)
@@ -164,9 +164,10 @@ struct ContentView: View {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        Group {
-            ContentView()
-            ContentView().previewDevice("iPhone 8 Plus")
-        }
+        ContentView()
+//        Group {
+//            ContentView()
+//            ContentView().previewDevice("iPhone 8 Plus")
+//        }
     }
 }
